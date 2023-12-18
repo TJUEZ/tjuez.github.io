@@ -1,3 +1,3 @@
 # tjuez.github.io
-Gridea/Blog
+Gridea/Blog/test
 test
