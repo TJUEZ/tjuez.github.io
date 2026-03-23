@@ -5,233 +5,382 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TJUEZ - 个人作品集</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-deep: #0a0a0a;
+            --bg-surface: #141414;
+            --bg-elevated: #1c1c1c;
+            --text-primary: #e8e8e3;
+            --text-secondary: #8a8a80;
+            --text-muted: #555550;
+            --amber: #ff9f1c;
+            --amber-dim: #cc7f16;
+            --amber-glow: rgba(255, 159, 28, 0.15);
+            --amber-subtle: rgba(255, 159, 28, 0.08);
+            --border: #2a2a28;
+            --syntax-green: #7ec699;
+            --syntax-blue: #61afef;
+            --syntax-purple: #c678dd;
+            --syntax-orange: #d19a66;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #1a1a24;
-            --bg-card-hover: #22222e;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --text-muted: #606070;
-            --accent: #8b5cf6;
-            --accent-secondary: #06b6d4;
-            --accent-glow: rgba(139, 92, 246, 0.3);
-            --border: #2a2a3a;
-            --rust: #ce422b;
-            --typescript: #3178c6;
-            --python: #3776ab;
-            --html: #e34f26;
-            --javascript: #f7df1e;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
+            font-family: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-deep);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Animated Background */
-        .bg-grid {
+        /* Subtle scan line overlay */
+        .scanlines {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: 
-                linear-gradient(rgba(139,92,246,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(139,92,246,0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
             pointer-events: none;
-            z-index: 0;
+            z-index: 1000;
         }
 
-        .bg-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            top: -200px;
-            left: -200px;
-            pointer-events: none;
-            z-index: 0;
-            animation: pulse 8s ease-in-out infinite;
-        }
-
-        .bg-glow-2 {
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%);
-            bottom: -150px;
-            right: -150px;
-            pointer-events: none;
-            z-index: 0;
-            animation: pulse 10s ease-in-out infinite reverse;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.1); }
-        }
-
-        /* Layout */
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 24px;
-            position: relative;
-            z-index: 1;
+            padding: 0 32px;
         }
 
-        /* Hero Section */
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: linear-gradient(to bottom, var(--bg-deep) 0%, transparent 100%);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--amber);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: '>';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--amber);
+        }
+
+        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
             padding: 120px 0 80px;
+            position: relative;
         }
 
-        .avatar {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            box-shadow: 0 0 60px var(--accent-glow);
-            margin-bottom: 32px;
-            animation: float 6s ease-in-out infinite;
+        .hero-content {
+            max-width: 800px;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .hero-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--syntax-green);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .hero-label::before {
+            content: '// ';
+            color: var(--text-muted);
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: clamp(3rem, 8vw, 5.5rem);
             font-weight: 800;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #fff 0%, #a0a0b0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            line-height: 1;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.1s forwards;
         }
 
-        .hero .tagline {
-            font-size: 1.5rem;
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 24px;
+        .hero-tagline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--amber);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.2s forwards;
         }
 
-        .hero .bio {
-            font-size: 1.1rem;
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--amber);
+            animation: blink 0.8s step-end infinite;
+        }
+
+        .hero-bio {
+            font-size: 1.15rem;
             color: var(--text-secondary);
-            max-width: 600px;
-            margin-bottom: 40px;
+            max-width: 560px;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.3s forwards;
         }
 
-        .hero-stats {
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.4s forwards;
+        }
+
+        .btn {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 14px 28px;
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--amber-subtle);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            border-color: var(--amber);
+            color: var(--amber);
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn-primary {
+            background: var(--amber);
+            color: var(--bg-deep);
+            border-color: var(--amber);
+        }
+
+        .btn-primary:hover {
+            background: var(--amber-dim);
+            border-color: var(--amber-dim);
+            color: var(--bg-deep);
+        }
+
+        .btn-primary::before {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Stats bar */
+        .stats-bar {
             display: flex;
             gap: 48px;
-            margin-bottom: 40px;
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.5s forwards;
         }
 
         .stat {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .stat-value {
-            font-size: 2.5rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.75rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-primary);
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .hero-links {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .hero-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .hero-links a:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
-        }
-
-        /* Section Styles */
+        /* Section styles */
         section {
-            padding: 100px 0;
+            padding: 120px 0;
         }
 
         .section-header {
-            text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 64px;
         }
 
-        .section-header h2 {
-            font-size: 2.5rem;
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--syntax-green);
+            margin-bottom: 12px;
+        }
+
+        .section-label::before {
+            content: '## ';
+            color: var(--text-muted);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
             font-weight: 700;
-            margin-bottom: 16px;
+            color: var(--text-primary);
         }
 
-        .section-header p {
+        /* Featured section */
+        .featured {
+            background: var(--bg-surface);
+        }
+
+        .featured-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .featured-card::before {
+            content: 'FEATURED';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--bg-deep);
+            background: var(--amber);
+            padding: 4px 10px;
+            letter-spacing: 1px;
+        }
+
+        .featured-card:hover {
+            border-color: var(--amber);
+            transform: translateY(-4px);
+        }
+
+        .featured-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .prefix {
+            font-family: 'IBM Plex Mono', monospace;
+            color: var(--amber);
+        }
+
+        .featured-card .description {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
         }
 
-        /* Projects Grid */
+        .featured-meta {
+            display: flex;
+            gap: 24px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .featured-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--typescript, #3178c6);
+        }
+
+        /* Projects grid */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -239,35 +388,31 @@
         }
 
         .project-card {
-            background: var(--bg-card);
+            background: var(--bg-surface);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.4s ease;
+            padding: 28px;
             text-decoration: none;
             color: inherit;
             display: block;
+            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .project-card::before {
             content: '';
             position: absolute;
-            top: 0;
             left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--amber);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .project-card:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--accent);
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: var(--amber-dim);
+            transform: translateY(-2px);
         }
 
         .project-card:hover::before {
@@ -275,172 +420,164 @@
         }
 
         .project-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .project-card h3 .prefix {
-            color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
         .project-card p {
             font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: 16px;
             line-height: 1.6;
-            min-height: 48px;
+            margin-bottom: 20px;
         }
 
-        .project-meta {
+        .project-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
         .project-lang {
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
         }
 
-        .lang-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .stars {
+        .project-stars {
             display: flex;
             align-items: center;
             gap: 4px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
         }
 
-        /* Category Badge */
-        .category-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(139, 92, 246, 0.15);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: var(--accent);
-            margin-bottom: 16px;
+        /* Skills */
+        .skills-section {
+            background: var(--bg-surface);
         }
 
-        /* Featured Card */
-        .featured-card {
-            background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .featured-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-        }
-
-        .featured-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-        }
-
-        .featured-card .card-icon {
-            font-size: 3rem;
-            margin-bottom: 16px;
-        }
-
-        .featured-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .featured-card p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            margin-bottom: 20px;
-            line-height: 1.7;
-        }
-
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .skill-tag {
-            background: var(--bg-card);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            padding: 10px 18px;
+            background: var(--bg-elevated);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
         }
 
         .skill-tag:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
+            border-color: var(--amber);
+            color: var(--amber);
         }
 
         /* Footer */
         footer {
-            text-align: center;
             padding: 60px 0;
             border-top: 1px solid var(--border);
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
 
-        footer a {
-            color: var(--accent);
+        .footer-text a {
+            color: var(--amber);
             text-decoration: none;
+        }
+
+        .footer-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
             .hero h1 {
                 font-size: 2.5rem;
             }
-            
-            .hero-stats {
+
+            .stats-bar {
+                flex-wrap: wrap;
                 gap: 24px;
             }
-            
-            .stat-value {
-                font-size: 2rem;
+
+            .stat {
+                min-width: 100px;
             }
-            
+
             section {
-                padding: 60px 0;
+                padding: 80px 0;
             }
-            
-            .section-header h2 {
-                font-size: 2rem;
-            }
-            
+
             .projects-grid {
                 grid-template-columns: 1fr;
             }
+
+            footer .container {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--amber);
+            color: var(--bg-deep);
         }
 
         /* Scrollbar */
@@ -449,7 +586,7 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
+            background: var(--bg-deep);
         }
 
         ::-webkit-scrollbar-thumb {
@@ -460,239 +597,209 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--text-muted);
         }
-
-        /* Lobster emoji animation */
-        .lobster {
-            display: inline-block;
-            animation: wave 1s ease-in-out infinite;
-            transform-origin: 70% 70%;
-        }
-
-        @keyframes wave {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(20deg); }
-            75% { transform: rotate(-20deg); }
-        }
     </style>
 </head>
 <body>
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
+    <div class="scanlines"></div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <img src="https://avatars.githubusercontent.com/u/99857729?v=4" alt="TJUEZ" class="avatar">
-        <h1>TJUEZ</h1>
-        <p class="tagline">Creator of "ez" and "un" Series <span class="lobster">🦞</span></p>
-        <p class="bio">热爱开源，专注于开发者工具、AI应用、隐私保护软件。喜欢做一些有用又有趣的小工具。</p>
-        
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-value">17</div>
-                <div class="stat-label">原创项目</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">4</div>
-                <div class="stat-label">语言</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">2</div>
-                <div class="stat-label">Starred</div>
-            </div>
-        </div>
-
-        <div class="hero-links">
-            <a href="https://github.com/TJUEZ" target="_blank">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                GitHub
-            </a>
-            <a href="https://github.com/TJUEZ/ezA2T" target="_blank">
-                ⭐ ezA2T
-            </a>
-            <a href="https://github.com/TJUEZ/ezcut" target="_blank">
-                ✂️ ezCut
-            </a>
-        </div>
-
-        <div class="scroll-indicator">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M5 12l7 7 7-7"/>
-            </svg>
-        </div>
-    </section>
-
-    <!-- Featured Projects -->
-    <section id="featured">
+    <header>
         <div class="container">
-            <div class="section-header">
-                <h2>Featured Projects</h2>
-                <p>我最得意的作品</p>
-            </div>
+            <a href="#" class="logo">TJUEZ</a>
+            <ul class="nav-links">
+                <li><a href="#featured">Featured</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+            </ul>
+        </div>
+    </header>
 
-            <div class="projects-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); max-width: 500px; margin: 0 auto;">
-                <div class="featured-card">
-                    <span class="category-badge">🤖 AI工具</span>
-                    <h3>unAI</h3>
-                    <p>精确检测AI生成内容的工具。帮助定位和修改AIGC率可能较高的部分，使内容能够通过最终检测。不同于绕过检测，而是精确定位问题区域便于针对性优化。</p>
-                    <div class="project-meta">
-                        <div class="project-lang">
-                            <span class="lang-dot" style="background: var(--typescript)"></span>
-                            TypeScript
-                        </div>
-                        <div class="stars">⭐ 1</div>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-label">hello_world()</p>
+                <h1>TJUEZ</h1>
+                <p class="hero-tagline">
+                    <span>Creator of "ez" and "un" Series</span>
+                    <span class="cursor"></span>
+                </p>
+                <p class="hero-bio">
+                    热爱开源，专注于开发者工具、AI应用、隐私保护软件。喜欢做一些有用又有趣的小工具。
+                </p>
+                <div class="hero-actions">
+                    <a href="https://github.com/TJUEZ" target="_blank" class="btn btn-primary">
+                        GitHub
+                    </a>
+                    <a href="https://github.com/TJUEZ/ezA2T" target="_blank" class="btn">
+                        ezA2T
+                    </a>
+                    <a href="https://github.com/TJUEZ/ezcut" target="_blank" class="btn">
+                        ezCut
+                    </a>
+                </div>
+                <div class="stats-bar">
+                    <div class="stat">
+                        <span class="stat-value">17</span>
+                        <span class="stat-label">原创项目</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">4</span>
+                        <span class="stat-label">语言</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">2</span>
+                        <span class="stat-label">Starred</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- AI & Tools -->
-    <section id="ai" style="background: var(--bg-secondary);">
+    <section class="featured" id="featured">
         <div class="container">
             <div class="section-header">
-                <h2>AI & 智能工具</h2>
-                <p>"un" 系列 — 探索AI边界</p>
+                <p class="section-label">featured_project()</p>
+                <h2 class="section-title">Featured</h2>
             </div>
+            <div class="reveal">
+                <a href="https://github.com/TJUEZ/unai" class="featured-card" target="_blank">
+                    <h3><span class="prefix">un</span>AI</h3>
+                    <p class="description">
+                        精确检测AI生成内容的工具。帮助定位和修改AIGC率可能较高的部分，使内容能够通过最终检测。不同于绕过检测，而是精确定位问题区域便于针对性优化。
+                    </p>
+                    <div class="featured-meta">
+                        <span><span class="lang-indicator" style="background: #3178c6"></span> TypeScript</span>
+                        <span>⭐ 1</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
+    <section id="projects">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">ai_tools[]</p>
+                <h2 class="section-title">AI & 智能工具</h2>
+            </div>
             <div class="projects-grid">
-                <a href="https://github.com/TJUEZ/unai" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/unai" class="project-card reveal" target="_blank">
                     <h3><span class="prefix">un</span>AI</h3>
                     <p>基于深度学习的中文AIGC文本检测器，基于RoBERTa预训练模型，支持文本/文件导入、分块检测、段落级概率标注</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">Python/Flask/React</span>
-                        <span class="stars">⭐ 1</span>
+                        <span class="project-stars">⭐ 1</span>
                     </div>
                 </a>
 
-                <a href="https://github.com/TJUEZ/unPaper" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/unPaper" class="project-card reveal" target="_blank">
                     <h3><span class="prefix">un</span>Paper</h3>
                     <p>文档处理工具</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">TypeScript</span>
                     </div>
                 </a>
 
-                <a href="https://github.com/TJUEZ/alloyagent" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/alloyagent" class="project-card reveal" target="_blank">
                     <h3>alloyagent</h3>
                     <p>AlloyStack Serverless Benchmark Suite — 评测 AlloyStack serverless 工作流优化的性能基准套件</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">Rust</span>
                     </div>
                 </a>
 
-                <a href="https://github.com/TJUEZ/alloyfang" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/alloyfang" class="project-card reveal" target="_blank">
                     <h3>alloyfang</h3>
                     <p>AlloyStack vs OpenFang 性能对比基准测试</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">Rust</span>
                     </div>
                 </a>
             </div>
         </div>
-    </section>
 
-    <!-- Productivity Tools -->
-    <section id="tools">
-        <div class="container">
+        <div class="container" style="margin-top: 80px;">
             <div class="section-header">
-                <h2>效率工具</h2>
-                <p>"ez" 系列 — 简单好用的工具</p>
+                <p class="section-label">ez_tools[]</p>
+                <h2 class="section-title">效率工具</h2>
             </div>
-
             <div class="projects-grid">
-                <a href="https://github.com/TJUEZ/ezcut" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/ezcut" class="project-card reveal" target="_blank">
                     <h3><span class="prefix">ez</span>Cut</h3>
                     <p>基于 PyQt6 的专业桌面视频编辑软件，支持多轨道编辑、拖拽操作、实时预览</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">Python/PyQt6</span>
                     </div>
                 </a>
 
-                <a href="https://github.com/TJUEZ/ezA2T" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/ezA2T" class="project-card reveal" target="_blank">
                     <h3><span class="prefix">ez</span>A2T</h3>
                     <p>专为 Windows 设计的完全离线实时字幕识别工具，使用 WASAPI loopback 技术捕获系统音频，支持多语言模型</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">Python</span>
-                        <span class="stars">⭐ 1</span>
+                        <span class="project-stars">⭐ 1</span>
                     </div>
                 </a>
 
-                <a href="https://github.com/TJUEZ/ezHome" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/ezHome" class="project-card reveal" target="_blank">
                     <h3><span class="prefix">ez</span>Home</h3>
                     <p>基于多模态交互的智能家居控制系统，支持语音、手势、动作三种交互方式，通过 MQTT 协议控制智能设备</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">JavaScript</span>
                     </div>
                 </a>
 
-                <a href="https://github.com/TJUEZ/ezIII" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/ezIII" class="project-card reveal" target="_blank">
                     <h3><span class="prefix">ez</span>III</h3>
                     <p>基于 PaddleOCR 的视频智能分割工具，通过识别视频中标题变化自动切分视频，支持两轮检测算法精确定位</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">Python</span>
-                        <span class="stars">⭐ 1</span>
+                        <span class="project-stars">⭐ 1</span>
                     </div>
                 </a>
 
-                <a href="https://github.com/TJUEZ/ezGame" class="project-card" target="_blank">
+                <a href="https://github.com/TJUEZ/ezGame" class="project-card reveal" target="_blank">
                     <h3><span class="prefix">ez</span>Game</h3>
                     <p>React + TypeScript + Vite 项目模板，快速启动现代前端应用开发</p>
-                    <div class="project-meta">
+                    <div class="project-footer">
                         <span class="project-lang">TypeScript/React</span>
                     </div>
                 </a>
-
             </div>
         </div>
     </section>
 
-    <!-- Skills -->
-    <section id="skills">
+    <section class="skills-section" id="skills">
         <div class="container">
             <div class="section-header">
-                <h2>技术栈</h2>
-                <p>我常用的技术</p>
+                <p class="section-label">tech_stack[]</p>
+                <h2 class="section-title">技术栈</h2>
             </div>
-
-            <div class="skills-grid">
-                <div class="skill-tag" style="border-color: var(--typescript);">TypeScript</div>
-                <div class="skill-tag" style="border-color: var(--python);">Python</div>
-                <div class="skill-tag" style="border-color: var(--javascript);">JavaScript</div>
-                <div class="skill-tag" style="border-color: var(--rust);">Rust</div>
-                <div class="skill-tag" style="border-color: var(--html);">HTML/CSS</div>
-                <div class="skill-tag">AI/LLM</div>
-                <div class="skill-tag">隐私计算</div>
-                <div class="skill-tag">工具开发</div>
+            <div class="skills-list reveal">
+                <span class="skill-tag">TypeScript</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Rust</span>
+                <span class="skill-tag">HTML/CSS</span>
+                <span class="skill-tag">AI/LLM</span>
+                <span class="skill-tag">隐私计算</span>
+                <span class="skill-tag">工具开发</span>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>Made with <span class="lobster">🦞</span> by <a href="https://github.com/TJUEZ" target="_blank">TJUEZ</a></p>
-            <p style="margin-top: 8px; font-size: 0.85rem;">17 原创项目 · "ez" & "un" Series Creator</p>
-            <p style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);">
-                🚀 All projects generated via Vibe Coding with AI
+            <p class="footer-text">
+                Made with <span style="color: var(--amber);">console.log</span> by <a href="https://github.com/TJUEZ" target="_blank">TJUEZ</a>
+            </p>
+            <p class="footer-note">
+                17 原创项目 · "ez" & "un" Series Creator
             </p>
         </div>
     </footer>
 
     <script>
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Intersection Observer for animations
+        // Scroll reveal
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -701,17 +808,24 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.featured-card, .project-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
         });
     </script>
 </body>
