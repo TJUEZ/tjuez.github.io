@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TJUEZ - 个人作品集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #22222e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --accent: #8b5cf6;
+            --accent-secondary: #06b6d4;
+            --accent-glow: rgba(139, 92, 246, 0.3);
+            --border: #2a2a3a;
+            --rust: #ce422b;
+            --typescript: #3178c6;
+            --python: #3776ab;
+            --html: #e34f26;
+            --javascript: #f7df1e;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(139,92,246,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139,92,246,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .bg-glow-2 {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%);
+            bottom: -150px;
+            right: -150px;
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 0 80px;
+        }
+
+        .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 60px var(--accent-glow);
+            margin-bottom: 32px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .hero .bio {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .hero-links a:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-card h3 .prefix {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .project-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+            min-height: 48px;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-lang {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .lang-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .stars {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Category Badge */
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        /* Featured Card */
+        .featured-card {
+            background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+        }
+
+        .featured-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .featured-card .card-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .featured-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .featured-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .skill-tag {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                gap: 24px;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Lobster emoji animation */
+        .lobster {
+            display: inline-block;
+            animation: wave 1s ease-in-out infinite;
+            transform-origin: 70% 70%;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-20deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="https://avatars.githubusercontent.com/u/99857729?v=4" alt="TJUEZ" class="avatar">
+        <h1>TJUEZ</h1>
+        <p class="tagline">Creator of "ez" and "un" Series <span class="lobster">🦞</span></p>
+        <p class="bio">热爱开源，专注于开发者工具、AI应用、隐私保护软件。喜欢做一些有用又有趣的小工具。</p>
+        
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">19</div>
+                <div class="stat-label">原创项目</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4</div>
+                <div class="stat-label">语言</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Starred</div>
+            </div>
+        </div>
+
+        <div class="hero-links">
+            <a href="https://github.com/TJUEZ" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                GitHub
+            </a>
+            <a href="https://github.com/TJUEZ/ezA2T" target="_blank">
+                ⭐ ezA2T
+            </a>
+            <a href="https://github.com/TJUEZ/ezcut" target="_blank">
+                ✂️ ezCut
+            </a>
+        </div>
+
+        <div class="scroll-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Featured Projects -->
+    <section id="featured">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Projects</h2>
+                <p>我最得意的作品</p>
+            </div>
+
+            <div class="projects-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+                <div class="featured-card">
+                    <span class="category-badge">🖥️ 效率工具</span>
+                    <h3>ezA2T</h3>
+                    <p>完全离线的实时字幕识别工具。保护隐私，无需上传数据到云端，在本地就能完成语音转文字。适合会议记录、视频字幕、学习笔记等场景。</p>
+                    <div class="project-meta">
+                        <div class="project-lang">
+                            <span class="lang-dot" style="background: var(--python)"></span>
+                            Python
+                        </div>
+                        <div class="stars">⭐ 1</div>
+                    </div>
+                </div>
+
+                <div class="featured-card">
+                    <span class="category-badge">🎬 视频工具</span>
+                    <h3>ezCut</h3>
+                    <p>一个用于快速视频切片的免费软件。简单易用，无需复杂的编辑流程，轻轻一划就能切除不需要的片段。</p>
+                    <div class="project-meta">
+                        <div class="project-lang">
+                            <span class="lang-dot" style="background: var(--python)"></span>
+                            Python
+                        </div>
+                    </div>
+                </div>
+
+                <div class="featured-card">
+                    <span class="category-badge">📸 图片工具</span>
+                    <h3>ezGraph</h3>
+                    <p>一个多端适用的免费照片编辑软件。轻量级但功能丰富，随时随地编辑你的照片。</p>
+                    <div class="project-meta">
+                        <div class="project-lang">
+                            <span class="lang-dot" style="background: var(--javascript)"></span>
+                            JavaScript
+                        </div>
+                    </div>
+                </div>
+
+                <div class="featured-card">
+                    <span class="category-badge">🤖 AI工具</span>
+                    <h3>unAI</h3>
+                    <p>用于降低AI率的工具。当AI生成内容被检测时，这个工具可以帮助绕过检测，让AI交互更加自然。</p>
+                    <div class="project-meta">
+                        <div class="project-lang">
+                            <span class="lang-dot" style="background: var(--typescript)"></span>
+                            TypeScript
+                        </div>
+                        <div class="stars">⭐ 1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI & Tools -->
+    <section id="ai" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <h2>AI & 智能工具</h2>
+                <p>"un" 系列 — 探索AI边界</p>
+            </div>
+
+            <div class="projects-grid">
+                <a href="https://github.com/TJUEZ/unllm" class="project-card" target="_blank">
+                    <h3><span class="prefix">un</span>LLM</h3>
+                    <p>Universal LLM interface — 一个统一的LLM接口，简化与各种语言模型的交互</p>
+                    <div class="project-meta">
+                        <span class="project-lang">TypeScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/unai" class="project-card" target="_blank">
+                    <h3><span class="prefix">un</span>AI</h3>
+                    <p>用于降低AI检测率的工具</p>
+                    <div class="project-meta">
+                        <span class="project-lang">TypeScript</span>
+                        <span class="stars">⭐ 1</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/unPaper" class="project-card" target="_blank">
+                    <h3><span class="prefix">un</span>Paper</h3>
+                    <p>文档处理工具</p>
+                    <div class="project-meta">
+                        <span class="project-lang">TypeScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/unBuy" class="project-card" target="_blank">
+                    <h3><span class="prefix">un</span>Buy</h3>
+                    <p>购物比价相关工具</p>
+                    <div class="project-meta">
+                        <span class="project-lang">TypeScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/unsoul" class="project-card" target="_blank">
+                    <h3><span class="prefix">un</span>Soul</h3>
+                    <p>探索数字身份与灵魂的创意项目</p>
+                    <div class="project-meta">
+                        <span class="project-lang">TypeScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/alloyagent" class="project-card" target="_blank">
+                    <h3>alloyagent</h3>
+                    <p>融合 alloystack + openfang 的 agent 框架</p>
+                    <div class="project-meta">
+                        <span class="project-lang">Rust</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/alloyfang" class="project-card" target="_blank">
+                    <h3>alloyfang</h3>
+                    <p>alloystack + openfang 测试项目</p>
+                    <div class="project-meta">
+                        <span class="project-lang">Rust</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productivity Tools -->
+    <section id="tools">
+        <div class="container">
+            <div class="section-header">
+                <h2>效率工具</h2>
+                <p>"ez" 系列 — 简单好用的工具</p>
+            </div>
+
+            <div class="projects-grid">
+                <a href="https://github.com/TJUEZ/ezcut" class="project-card" target="_blank">
+                    <h3><span class="prefix">ez</span>Cut</h3>
+                    <p>快速视频切片免费软件</p>
+                    <div class="project-meta">
+                        <span class="project-lang">Python</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/ezA2T" class="project-card" target="_blank">
+                    <h3><span class="prefix">ez</span>A2T</h3>
+                    <p>完全离线的实时字幕识别</p>
+                    <div class="project-meta">
+                        <span class="project-lang">Python</span>
+                        <span class="stars">⭐ 1</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/ezgraph" class="project-card" target="_blank">
+                    <h3><span class="prefix">ez</span>Graph</h3>
+                    <p>多端适用的免费照片编辑软件</p>
+                    <div class="project-meta">
+                        <span class="project-lang">JavaScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/ezGame" class="project-card" target="_blank">
+                    <h3><span class="prefix">ez</span>Game</h3>
+                    <p>浏览器游戏</p>
+                    <div class="project-meta">
+                        <span class="project-lang">TypeScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/ezHome" class="project-card" target="_blank">
+                    <h3><span class="prefix">ez</span>Home</h3>
+                    <p>智能家居控制界面</p>
+                    <div class="project-meta">
+                        <span class="project-lang">JavaScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/ezIII" class="project-card" target="_blank">
+                    <h3><span class="prefix">ez</span>III</h3>
+                    <p>创新的Web应用项目</p>
+                    <div class="project-meta">
+                        <span class="project-lang">HTML</span>
+                        <span class="stars">⭐ 1</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/ezInfonet" class="project-card" target="_blank">
+                    <h3><span class="prefix">ez</span>Infonet</h3>
+                    <p>网络信息工具</p>
+                    <div class="project-meta">
+                        <span class="project-lang">JavaScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/picGO9" class="project-card" target="_blank">
+                    <h3>picGO9</h3>
+                    <p>图床图片管理工具</p>
+                    <div class="project-meta">
+                        <span class="project-lang">JavaScript</span>
+                    </div>
+                </a>
+
+                <a href="https://github.com/TJUEZ/web_fps_solo" class="project-card" target="_blank">
+                    <h3>web_fps_solo</h3>
+                    <p>浏览器单人FPS游戏</p>
+                    <div class="project-meta">
+                        <span class="project-lang">JavaScript</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog -->
+    <section id="blog" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <h2>博客</h2>
+                <p>记录我的想法和折腾</p>
+            </div>
+
+            <div class="projects-grid" style="max-width: 600px; margin: 0 auto;">
+                <a href="https://github.com/TJUEZ/tjuez.github.io" class="project-card" target="_blank">
+                    <h3>📝 tjuez.github.io</h3>
+                    <p>我的个人博客，用 Gridea 驱动。记录技术分享、项目折腾和生活点滴。</p>
+                    <div class="project-meta">
+                        <span class="project-lang">Gridea/Blog</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2>技术栈</h2>
+                <p>我常用的技术</p>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-tag" style="border-color: var(--typescript);">TypeScript</div>
+                <div class="skill-tag" style="border-color: var(--python);">Python</div>
+                <div class="skill-tag" style="border-color: var(--javascript);">JavaScript</div>
+                <div class="skill-tag" style="border-color: var(--rust);">Rust</div>
+                <div class="skill-tag" style="border-color: var(--html);">HTML/CSS</div>
+                <div class="skill-tag">AI/LLM</div>
+                <div class="skill-tag">隐私计算</div>
+                <div class="skill-tag">工具开发</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Made with <span class="lobster">🦞</span> by <a href="https://github.com/TJUEZ" target="_blank">TJUEZ</a></p>
+            <p style="margin-top: 8px; font-size: 0.85rem;">19 原创项目 · "ez" & "un" Series Creator</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.featured-card, .project-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
