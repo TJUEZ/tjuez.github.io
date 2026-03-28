@@ -6,37 +6,38 @@ title: Blog
 <section class="page-hero">
     <div class="container">
         <h1>Blog</h1>
-        <p>// archive of thoughts, tutorials, and everything in between</p>
+        <nav class="category-tabs">
+            <button class="tab-btn active" data-category="all">All</button>
+            {% assign sorted_posts = site.posts | sort: 'date' | reverse %}
+            {% assign cat_list = "" | split: "" %}
+            {% for p in sorted_posts %}
+                {% if p.type %}
+                    {% assign cat = p.type %}
+                {% else %}
+                    {% assign cat = "Uncategorized" %}
+                {% endif %}
+                {% assign already = false %}
+                {% for c in cat_list %}
+                    {% if c == cat %}
+                        {% assign already = true %}
+                    {% endif %}
+                {% endfor %}
+                {% unless already %}
+                    {% assign cat_list = cat_list | push: cat %}
+                {% endunless %}
+            {% endfor %}
+            {% assign cat_list = cat_list | sort %}
+            {% for cat in cat_list %}
+            <button class="tab-btn" data-category="{{ cat }}">{{ cat }}</button>
+            {% endfor %}
+        </nav>
     </div>
 </section>
 
 <section class="posts-list">
     <div class="container">
-        {% assign sorted_posts = site.posts | sort: 'date' | reverse %}
-
-        {% comment %} Extract unique categories from front matter type {% endcomment %}
-        {% assign cat_list = "" | split: "" %}
-        {% for p in sorted_posts %}
-            {% if p.type %}
-                {% assign cat = p.type %}
-            {% else %}
-                {% assign cat = "Uncategorized" %}
-            {% endif %}
-            {% assign already = false %}
-            {% for c in cat_list %}
-                {% if c == cat %}
-                    {% assign already = true %}
-                {% endif %}
-            {% endfor %}
-            {% unless already %}
-                {% assign cat_list = cat_list | push: cat %}
-            {% endunless %}
-        {% endfor %}
-        {% assign cat_list = cat_list | sort %}
-
-        {% comment %} Output each category and its posts {% endcomment %}
         {% for cat in cat_list %}
-        <div class="category-group">
+        <div class="category-group" data-category="{{ cat }}">
             <div class="category-header">
                 <span class="category-prefix">//</span>
                 <span class="category-name">{{ cat }}</span>
@@ -71,7 +72,7 @@ title: Blog
 
 <style>
 .page-hero {
-    padding: 60px 0 48px;
+    padding: 48px 0 0;
     border-bottom: 1px solid var(--border);
     margin-bottom: 0;
 }
@@ -79,12 +80,32 @@ title: Blog
     font-size: 2.5rem;
     font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 24px;
 }
-.page-hero p {
-    color: var(--syntax-green);
+.category-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+}
+.tab-btn {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tab-btn:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+}
+.tab-btn.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: var(--bg-deep);
 }
 
 .posts-list {
@@ -92,7 +113,10 @@ title: Blog
 }
 
 .category-group {
-    margin-bottom: 48px;
+    display: block;
+}
+.category-group.hidden {
+    display: none;
 }
 
 .category-header {
@@ -158,3 +182,21 @@ title: Blog
     font-size: 14px;
 }
 </style>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const cat = btn.dataset.category;
+        document.querySelectorAll('.category-group').forEach(group => {
+            if (cat === 'all' || group.dataset.category === cat) {
+                group.classList.remove('hidden');
+            } else {
+                group.classList.add('hidden');
+            }
+        });
+    });
+});
+</script>
