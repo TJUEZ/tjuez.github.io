@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 欢迎来到我的博客
+title: Start Blogging
 type: RUST
 ---
 
