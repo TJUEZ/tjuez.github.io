@@ -1,6 +1,7 @@
 ---
 layout: post
-title: RUST // 欢迎来到我的博客
+title: 欢迎来到我的博客
+type: RUST
 ---
 
 这是我的第一篇博客文章 🎉
