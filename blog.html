@@ -6,20 +6,33 @@ title: Blog
 <section class="page-hero">
     <div class="container">
         <h1>Blog</h1>
-        <p>Thoughts, tutorials, and everything in between.</p>
+        <p>// archive of thoughts, tutorials, and everything in between</p>
     </div>
 </section>
 
 <section class="posts-list">
     <div class="container">
-        {% for post in site.posts %}
-        <article class="post-item">
-            <div class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</div>
-            <a href="{{ post.url }}" class="post-title">{{ post.title }}</a>
-            {% if post.excerpt %}
-            <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
-            {% endif %}
-        </article>
+        {% assign sorted_posts = site.posts | sort: 'date' | reverse %}
+        {% assign grouped = sorted_posts | group_by_exp: 'post', 'post.basename | split: "-" | first' | sort: 'name' %}
+
+        {% for group in grouped %}
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-prefix">//</span>
+                <span class="category-name">{{ group.name }}</span>
+                <span class="category-count">({{ group.items | size }})</span>
+            </div>
+
+            {% for post in group.items %}
+            <article class="post-item">
+                <div class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</div>
+                <a href="{{ post.url }}" class="post-title">{{ post.title }}</a>
+                {% if post.excerpt %}
+                <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
         {% else %}
         <div class="empty-state">
             <p>&lt;no posts yet /&gt;</p>
@@ -41,18 +54,45 @@ title: Blog
     margin-bottom: 8px;
 }
 .page-hero p {
-    color: var(--text-secondary);
-    font-size: 1rem;
+    color: var(--syntax-green);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.95rem;
 }
 
 .posts-list {
     padding-bottom: 100px;
 }
 
-.post-item {
-    padding: 40px 0;
+.category-group {
+    margin-bottom: 48px;
+}
+
+.category-header {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+    padding: 24px 0 16px;
     border-bottom: 1px solid var(--border);
-    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.category-prefix {
+    color: var(--text-muted);
+}
+.category-name {
+    color: var(--amber);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.category-count {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.post-item {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
 }
 .post-item:last-child {
     border-bottom: none;
@@ -60,26 +100,26 @@ title: Blog
 .post-meta {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.8rem;
-    color: var(--amber);
-    margin-bottom: 12px;
+    color: var(--syntax-green);
+    margin-bottom: 10px;
     letter-spacing: 0.5px;
 }
 .post-title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: var(--text-primary);
     text-decoration: none;
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     transition: color 0.2s;
-    line-height: 1.3;
+    line-height: 1.35;
 }
 .post-title:hover {
     color: var(--amber);
 }
 .post-excerpt {
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.7;
     max-width: 600px;
 }
