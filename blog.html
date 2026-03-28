@@ -13,24 +13,57 @@ title: Blog
 <section class="posts-list">
     <div class="container">
         {% assign sorted_posts = site.posts | sort: 'date' | reverse %}
-        {% assign grouped = sorted_posts | group_by_exp: 'post', 'post.basename | split: "-" | first' | sort: 'name' %}
 
-        {% for group in grouped %}
+        {% comment %} Parse category from title using "//" delimiter {% endcomment %}
+        {% assign categorized = "" | split: "" %}
+        {% for post in sorted_posts %}
+            {% if post.title contains "//" %}
+                {% assign category = post.title | split: "//" | first | strip %}
+                {% assign post_title = post.title | split: "//" | last | strip %}
+            {% else %}
+                {% assign category = "Uncategorized" %}
+                {% assign post_title = post.title %}
+            {% endif %}
+            {% assign categorized = categorized | concat: '{"category":"' | append: category | append: '","title":"' | append: post_title | append: '","url":"' | append: post.url | append: '","excerpt":"' | append: post.excerpt | append: '","data":"' | append: post.date | append: '"}' | split: "" %}
+        {% endfor %}
+
+        {% comment %} Group by category {% endcomment %}
+        {% assign categories = "" | split: "" %}
+        {% for post in sorted_posts %}
+            {% if post.title contains "//" %}
+                {% assign category = post.title | split: "//" | first | strip %}
+            {% else %}
+                {% assign category = "Uncategorized" %}
+            {% endif %}
+            {% unless categories contains category %}
+                {% assign categories = categories | push: category %}
+            {% endunless %}
+        {% endfor %}
+        {% assign categories = categories | sort %}
+
+        {% for cat in categories %}
         <div class="category-group">
             <div class="category-header">
                 <span class="category-prefix">//</span>
-                <span class="category-name">{{ group.name }}</span>
-                <span class="category-count">({{ group.items | size }})</span>
+                <span class="category-name">{{ cat }}</span>
+                <span class="category-count">({{ sorted_posts | where: 'title', cat | size }})</span>
             </div>
 
-            {% for post in group.items %}
-            <article class="post-item">
-                <div class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</div>
-                <a href="{{ post.url }}" class="post-title">{{ post.title }}</a>
-                {% if post.excerpt %}
-                <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+            {% for post in sorted_posts %}
+                {% if post.title contains "//" %}
+                    {% assign post_cat = post.title | split: "//" | first | strip %}
+                {% else %}
+                    {% assign post_cat = "Uncategorized" %}
                 {% endif %}
-            </article>
+                {% if post_cat == cat %}
+                <article class="post-item">
+                    <div class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</div>
+                    <a href="{{ post.url }}" class="post-title">{{ post.title | split: "//" | last | strip }}</a>
+                    {% if post.excerpt %}
+                    <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+                    {% endif %}
+                </article>
+                {% endif %}
             {% endfor %}
         </div>
         {% else %}
